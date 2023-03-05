@@ -5,11 +5,16 @@ using System.Linq;
 
 namespace GB.QuizAPI.Repository;
 
-public class SitecoreContentHubDeveloperPrep : BaseQuizRepo
+public class SitecoreContentHubDeveloperPrep : BaseQuizRepo, IQuiz
 {
+    public string GetId()
+    {
+        return "64d3f786-8ce5-4860-b8ee-ce531f4756ae";
+    }
+
     public override string GetName()
     {
-        return "SitecoreContentHubDeveloperPrep";
+        return "Sitecore Content Hub Developer Prep";
     }
 
     public override List<Question> GetAllQuestions()
