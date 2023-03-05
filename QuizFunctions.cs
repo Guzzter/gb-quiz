@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
@@ -17,11 +18,28 @@ namespace GB.QuizAPI
     public class QuizFunctions
     {
         private readonly ILogger<QuizFunctions> _logger;
-        private SitecoreContentHubDeveloperExam _quizRepo = new SitecoreContentHubDeveloperExam();
+        private SitecoreContentHubDeveloperPrep _quizRepo = new SitecoreContentHubDeveloperPrep();
 
         public QuizFunctions(ILogger<QuizFunctions> log)
         {
             _logger = log;
+        }
+
+        [FunctionName("GetQuiz")]
+        [OpenApiOperation(operationId: "Run", tags: new[] { "name" })]
+        [OpenApiParameter("name", Description = "Quiz name", Required = true, In = ParameterLocation.Query, Type = typeof(string))]
+        [OpenApiParameter("questions", Description = "Amount of questions", Required = false, In = ParameterLocation.Query, Type = typeof(int))]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "The OK response")]
+        public async Task<IActionResult> GetQuiz(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req)
+        {
+            _logger.LogInformation("GetRandomQuestion");
+            int questions;
+            if (!int.TryParse(req.Query["questions"], out questions))
+            {
+                questions = 9999;
+            }
+            return new OkObjectResult(_quizRepo.GetQuiz(questions));
         }
 
         [FunctionName("GetRandomQuestion")]

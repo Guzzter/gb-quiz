@@ -1,4 +1,5 @@
 ﻿using GB.QuizAPI.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,6 +8,28 @@ namespace GB.QuizAPI.Repository;
 public abstract class BaseQuizRepo
 {
     public abstract List<Question> GetAllQuestions();
+
+    public abstract string GetName();
+
+    public Quiz GetQuiz(int questionCount)
+    {
+        bool makeRandom = true;
+        var questions = GetAllQuestions();
+        int questionsAvailable = questions.Count();
+        if (makeRandom)
+            questions.Shuffle();
+        questions = questions.Take(Math.Min(questionCount, questions.Count)).ToList();
+        questions.ForEach(q => q.AnswerOptions.Shuffle());
+
+        return new Quiz()
+        {
+            Questions = questions,
+            QuestionsSelectedCount = questions.Count,
+            Name = GetName(),
+            RandomQuestions = makeRandom,
+            QuestionsAvailableCount = questionsAvailable
+        };
+    }
 
     public Question GetRandomQuestion()
     {

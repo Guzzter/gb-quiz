@@ -1,10 +1,17 @@
 ﻿using GB.QuizAPI.Model;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GB.QuizAPI.Repository;
 
-internal class SitecoreContentHubDeveloperExam : BaseQuizRepo
+public class SitecoreContentHubDeveloperPrep : BaseQuizRepo
 {
+    public override string GetName()
+    {
+        return "SitecoreContentHubDeveloperPrep";
+    }
+
     public override List<Question> GetAllQuestions()
     {
         return new List<Question>() {
