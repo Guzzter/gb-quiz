@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "GB.QuizAPI": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7070",
+      "launchBrowser": false
+    }
+  }
+}
